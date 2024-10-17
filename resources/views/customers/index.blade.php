@@ -33,4 +33,24 @@
         </tbody>
     </table>
 </div>
+
+<div class="card mb-4">
+    <div class="card-header">Import Customers</div>
+    <div class="card-body">
+        <form action="{{ route('customers.import') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="form-group">
+                <label for="file">Excel File</label>
+                <input type="file" name="file" class="form-control-file" id="file" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Import Customers</button>
+        </form>
+    </div>
+</div>
+
+@if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
 @endsection

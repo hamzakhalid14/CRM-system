@@ -15,7 +15,7 @@ class SalesPerformanceExport implements FromCollection, WithHeadings
         $performanceData = [];
 
         foreach ($salesAgents as $agent) {
-            $closedLeads = Lead::where('status', 'closed')
+            $closedLeads = Lead::where('status', 'closed_won')
                 ->whereHas('customer.interactions', function ($query) use ($agent) {
                     $query->where('user_id', $agent->id);
                 })->count();

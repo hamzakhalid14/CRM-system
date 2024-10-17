@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Lead;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\SalesPerformanceExport;
 
@@ -15,7 +16,7 @@ class ReportController extends Controller
         $performanceData = [];
 
         foreach ($salesAgents as $agent) {
-            $closedLeads = Lead::where('status', 'closed')
+            $closedLeads = Lead::where('status', 'closed_won')
                 ->whereHas('customer.interactions', function ($query) use ($agent) {
                     $query->where('user_id', $agent->id);
                 })->count();

@@ -11,9 +11,13 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Admin\UserController;
+
+// import Customers
+Route::post('/customers/import', [CustomerController::class, 'import'])->name('customers.import');
 
 // Dashboard route
-
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
 // Authentication routes
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -31,7 +35,8 @@ Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('
 
 Route::middleware(['auth'])->group(function () {
     // Profile routes
-
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 
     // Resource routes
     Route::resource('customers', CustomerController::class);
@@ -46,7 +51,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Admin-only routes
     Route::middleware(['role:admin'])->prefix('admin')->group(function () {
-        Route::get('/users', [App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.users.index');
+        Route::get('/users', [UserController::class, 'index'])->name('admin.users.index');
         // Add more admin routes as needed
     });
 });

@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\CustomersImport;
+use Maatwebsite\Excel\Validators\ValidationException;
+
 
 class CustomerController extends Controller
 {
@@ -62,4 +66,19 @@ class CustomerController extends Controller
 
         return redirect()->route('customers.index')->with('success', 'Customer deleted successfully');
     }
+    
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+    
+        try {
+            Excel::import(new CustomersImport, $request->file('file'));
+            return redirect()->route('customers.index')->with('success', 'Customers imported successfully.');
+        } catch (ValidationException $e) {
+            return redirect()->route('customers.index')->with('error', 'There were errors in your Excel file. Please check and try again.');
+        }
+    }
 }
+
